@@ -1,0 +1,52 @@
+syntax = "v1"
+
+info(
+	title: "type title here"
+	desc: "type desc here"
+	author: "type author here"
+	email: "type email here"
+	version: "type version here"
+)
+type (
+	RegisterReq {
+		Name     string `json:"name"`
+		Mobile   string `json:"mobile"`
+		Password string `json:"password"`
+	}
+
+	RegisterResp {
+		Id     int64  `json:"id"`
+		Name   string `json:"name"`
+		Mobile string `json:"mobile"`
+	}
+
+	LoginReq {
+		Mobile   string `json:"mobile"`
+		Password string `json:"password"`
+	}
+
+	LoginResp {
+		AccessToken  string `json:"accessToken"`
+		AccessExpire int64  `json:"accessExpire"`
+	}
+
+	UserInfoResp {
+		Id   int64  `json:"id"`
+		Name string `json:"name"`
+	}
+)
+service user-api {
+	@handler Login
+	post /user/login (LoginReq) returns (LoginResp)
+	
+	@handler Register
+	post /user/register (RegisterReq) returns (RegisterResp)
+}
+
+@server (
+	jwt: Auth
+)
+service user-api {
+	@handler UserInfo
+	post /user/userinfo () returns (UserInfoResp)
+}
